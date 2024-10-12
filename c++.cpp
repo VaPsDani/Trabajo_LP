@@ -30,12 +30,12 @@ int main(void)
 {
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int screenWidth = 1600;
+    const int screenHeight = 900;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(144);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -45,14 +45,91 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
+        // Draw a button
+        Rectangle buttonB = { screenWidth / 2 - 200, screenHeight / 8 - 20, 100, 40 };
+        bool buttonHoveredB = CheckCollisionPointRec(GetMousePosition(), buttonB);
+
+        if (buttonHoveredB && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            // Button action here
+            DrawText("Button Pressed!", screenWidth / 2 - 130, screenHeight / 8 + 30, 20, RED);
+        }
+        DrawRectangleRec(buttonB, buttonHoveredB ? DARKGRAY : GRAY);
+        DrawText("BFS", screenWidth / 2 - 170, screenHeight / 8 - 10, 20, WHITE);
 
         // Draw
+        Rectangle buttonD = { screenWidth / 2 + 80, screenHeight / 8 - 20, 150, 40 };
+        bool buttonHoveredD = CheckCollisionPointRec(GetMousePosition(), buttonD);
+
+        if (buttonHoveredD && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            // Button action here
+            DrawText("Button Pressed!", screenWidth / 2 + 110 , screenHeight / 8 + 30, 20, RED);
+        }
+        DrawRectangleRec(buttonD, buttonHoveredD ? DARKGRAY : GRAY);
+        DrawText("D* focussed", screenWidth / 2 + 92 , screenHeight / 8 - 10, 20, WHITE);
+
+        DrawRectangleLines(screenWidth / 2 + 550, screenHeight / 8 - 20, 200, 40, BLACK);
+        
+        static int modo = 0;
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+            modo = !modo;
+        }
+
+        if (modo == 0) {
+            DrawText("Modo Edicion", screenWidth / 2 + 587, screenHeight / 8 - 10, 20, BLACK);
+        } else {
+            DrawText("Modo Juego", screenWidth / 2 + 587, screenHeight / 8 - 10, 20, BLACK);
+        }
+
+        ////////////////////////////////////////////////////////////////////// Draw grid///////////////////////////////////////////////////////////////////////////////
+        const int gridRows= 6;
+        const int gridCols = 12;
+        const int cellWidth = (screenWidth / gridCols) + 1;
+        const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
+        const int gridStartY = screenHeight / 4;
+        struct Rectangle {
+        bool presionado1;
+        bool presionado2;
+        };
+
+        // Draw cells
+        for (int i = 0; i < gridRows; i++)
+        {
+            for (int j = 0; j < gridCols; j++)
+            {
+            Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
+            bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
+            DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
+            if ((cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && modo==0) || cell.presionado1==false)
+            {
+                // Cell action here
+                DrawRectangle(cell.x, cell.y, (screenWidth / gridCols) + 1, (screenHeight - (screenHeight / 4)) / gridRows, RED);
+            }
+            
+            }
+        }
+
+        // Draw grid lines
+        for (int i = 0; i <= gridRows; i++)
+        {
+            DrawLine(0, gridStartY + i * cellHeight, screenWidth, gridStartY + i * cellHeight, BLACK);
+        }
+
+        for (int j = 0; j <= gridCols; j++)
+        {
+            DrawLine(j * cellWidth, gridStartY, j * cellWidth, screenHeight, BLACK);
+        }
+
+
+
+
         //----------------------------------------------------------------------------------
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
 
-            DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+            
 
         EndDrawing();
         //----------------------------------------------------------------------------------
