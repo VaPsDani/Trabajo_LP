@@ -88,10 +88,7 @@ int main(void)
         const int cellWidth = (screenWidth / gridCols) + 1;
         const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
         const int gridStartY = screenHeight / 4;
-        struct Rectangle {
-        bool presionado1;
-        bool presionado2;
-        };
+    
 
         // Draw cells
         for (int i = 0; i < gridRows; i++)
@@ -101,7 +98,7 @@ int main(void)
             Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
             bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
             DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
-            if ((cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && modo==0) || cell.presionado1==false)
+            if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) )
             {
                 // Cell action here
                 DrawRectangle(cell.x, cell.y, (screenWidth / gridCols) + 1, (screenHeight - (screenHeight / 4)) / gridRows, RED);
