@@ -127,6 +127,8 @@ int main(void)
                         }else if (origen==1){
                             DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); //amarillo
                             origen=+1;
+                        }else{
+                            DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
                         }
                     }
                 }
