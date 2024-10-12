@@ -1,28 +1,4 @@
-/*******************************************************************************************
-*
-*   raylib [core] example - Basic window
-*
-*   Welcome to raylib!
-*
-*   To test examples, just press F6 and execute raylib_compile_execute script
-*   Note that compiled executable is placed in the same folder as .c file
-*
-*   You can find all basic examples on C:\raylib\raylib\examples folder or
-*   raylib official webpage: www.raylib.com
-*
-*   Enjoy using raylib. :)
-*
-*   Example originally created with raylib 1.0, last time updated with raylib 1.0
-*
-*   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
-*   BSD-like license that allows static linking with closed source software
-*
-*   Copyright (c) 2013-2024 Ramon Santamaria (@raysan5)
-*
-********************************************************************************************/
-
 #include "raylib.h"
-
 //------------------------------------------------------------------------------------
 // Program main entry point
 //------------------------------------------------------------------------------------
@@ -38,6 +14,7 @@ int main(void)
     const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
     const int gridStartY = screenHeight / 4;
     int cellstates[gridRows][gridCols] = {0};
+    int origen=0;
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
 
@@ -76,9 +53,20 @@ int main(void)
         DrawText("D* focussed", screenWidth / 2 + 92 , screenHeight / 8 - 10, 20, WHITE);
 
         DrawRectangleLines(screenWidth / 2 + 550, screenHeight / 8 - 20, 200, 40, BLACK);
+
+        if (IsKeyPressed(KEY_Q)){
+            origen=0;
+            for (int i = 0; i < gridRows; i++)
+            {
+                for (int j = 0; j < gridCols; j++)
+                {
+                    cellstates[i][j] = 0;
+                }
+            }
+        }
         
         static int modo = 0;
-        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+        if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
             modo = !modo;
         }
 
@@ -87,17 +75,26 @@ int main(void)
         } else {
             DrawText("Modo Juego", screenWidth / 2 + 587, screenHeight / 8 - 10, 20, BLACK);
         }
-
-        ////////////////////////////////////////////////////////////////////// Draw grid///////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////// Dibujar grid///////////////////////////////////////////////////////////////////////////////
         for (int i = 0; i < gridRows; i++)
         {
             for (int j = 0; j < gridCols; j++)
             {
                 Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
-                if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) )
+                if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-                    cellstates[i][j] = !cellstates[i][j];
+
+                    if(modo==0){
+                        cellstates[i][j] = 1;
+                    }
+                    if(modo==1){
+                        cellstates[i][j] = 2;
+                    }
+                }
+                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) )
+                {
+                    cellstates[i][j] = 0;
                 }
             }
         }
@@ -117,9 +114,21 @@ int main(void)
             {
                 Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
-                if (cellstates[i][j] == 1)
+                if (cellstates[i][j] >= 1)
                 {
-                    DrawRectangleRec(cell, RED); // Active cell (red)
+                    if (modo==0 && cellstates[i][j] == 1)
+                    {   
+                        DrawRectangleRec(cell, RED);
+                    }else if(modo==1 && cellstates[i][j] == 2){
+                        if (origen==0)
+                        {
+                            DrawRectangleRec(cell, (Color){ 4, 255, 0, 255 }); //verde
+                            origen=+1;
+                        }else if (origen==1){
+                            DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); //amarillo
+                            origen=+1;
+                        }
+                    }
                 }
                 else
                 {
@@ -129,7 +138,7 @@ int main(void)
             }
         }
 
-        // Draw grid lines
+        ////////////////////////////// DIBUJAR LINEAS (NO TOCAR)///////////////////////////////
         for (int i = 0; i <= gridRows; i++)
         {
             DrawLine(0, gridStartY + i * cellHeight, screenWidth, gridStartY + i * cellHeight, BLACK);
