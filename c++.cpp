@@ -32,6 +32,12 @@ int main(void)
     //--------------------------------------------------------------------------------------
     const int screenWidth = 1600;
     const int screenHeight = 900;
+    const int gridRows= 6;
+    const int gridCols = 12;
+    const int cellWidth = (screenWidth / gridCols) + 1;
+    const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
+    const int gridStartY = screenHeight / 4;
+    int cellstates[gridRows][gridCols] = {0};
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
 
@@ -83,27 +89,43 @@ int main(void)
         }
 
         ////////////////////////////////////////////////////////////////////// Draw grid///////////////////////////////////////////////////////////////////////////////
-        const int gridRows= 6;
-        const int gridCols = 12;
-        const int cellWidth = (screenWidth / gridCols) + 1;
-        const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
-        const int gridStartY = screenHeight / 4;
-    
-
-        // Draw cells
         for (int i = 0; i < gridRows; i++)
         {
             for (int j = 0; j < gridCols; j++)
             {
-            Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
-            bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
-            DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
-            if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) )
-            {
-                // Cell action here
-                DrawRectangle(cell.x, cell.y, (screenWidth / gridCols) + 1, (screenHeight - (screenHeight / 4)) / gridRows, RED);
+                Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
+                bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
+                if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) )
+                {
+                    cellstates[i][j] = !cellstates[i][j];
+                }
             }
-            
+        }
+    
+
+        // Draw cells
+        
+
+        //----------------------------------------------------------------------------------
+        BeginDrawing();
+
+            ClearBackground(RAYWHITE);
+
+        for (int i = 0; i < gridRows; i++)
+        {
+            for (int j = 0; j < gridCols; j++)
+            {
+                Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
+                bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
+                if (cellstates[i][j] == 1)
+                {
+                    DrawRectangleRec(cell, RED); // Active cell (red)
+                }
+                else
+                {
+                    // Inactive cell (blue or darker if hovered)
+                    DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
+                }
             }
         }
 
@@ -117,16 +139,6 @@ int main(void)
         {
             DrawLine(j * cellWidth, gridStartY, j * cellWidth, screenHeight, BLACK);
         }
-
-
-
-
-        //----------------------------------------------------------------------------------
-        BeginDrawing();
-
-            ClearBackground(RAYWHITE);
-
-            
 
         EndDrawing();
         //----------------------------------------------------------------------------------
