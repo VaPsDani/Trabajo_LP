@@ -107,9 +107,20 @@ int main(void)
                     }
                 }
                 
-                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && modo==0 )
+                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
                 {
-                    cellstates[i][j] = 0;
+                    if (modo==0)
+                    {
+                        if (cell.x==origen[0] && cell.y==origen[1]){
+                            origen[0]=-1;
+                            origen[1]=-1;
+                        }
+                        if (cell.x==destino[0] && cell.y==destino[1]){
+                            destino[0]=-1;
+                            destino[1]=-1;
+                        }
+                        cellstates[i][j] = 0;
+                    } 
                 }
                 
             }
