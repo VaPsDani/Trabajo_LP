@@ -13,8 +13,9 @@ int main(void)
     const int cellWidth = (screenWidth / gridCols) + 1;
     const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
     const int gridStartY = screenHeight / 4;
-    int cellstates[gridRows][gridCols] = {0};
-    int origen=0;
+    static int cellstates[gridRows][gridCols] = {0};
+    static float origen[2] = { -1, -1 }; // Coordenadas de origen
+    static float destino[2] = { -1, -1 }; // Coordenadas de destino
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
 
@@ -28,7 +29,7 @@ int main(void)
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
-        // Draw a button
+        ////////////////////////////////////// BOTONES/////////////////////////////////////
         Rectangle buttonB = { screenWidth / 2 - 200, screenHeight / 8 - 20, 100, 40 };
         bool buttonHoveredB = CheckCollisionPointRec(GetMousePosition(), buttonB);
 
@@ -54,8 +55,12 @@ int main(void)
 
         DrawRectangleLines(screenWidth / 2 + 550, screenHeight / 8 - 20, 200, 40, BLACK);
 
+        /////////////////// REINICIAR ////////////////////////
         if (IsKeyPressed(KEY_Q)){
-            origen=0;
+            origen[0] = { -1};
+            origen[1] = { -1};
+            destino[0] = { -1};
+            destino[1] = { -1};
             for (int i = 0; i < gridRows; i++)
             {
                 for (int j = 0; j < gridCols; j++)
@@ -64,7 +69,8 @@ int main(void)
                 }
             }
         }
-        
+        //////////////////////////////////////////////////////
+
         static int modo = 0;
         if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
             modo = !modo;
@@ -75,7 +81,7 @@ int main(void)
         } else {
             DrawText("Modo Juego", screenWidth / 2 + 587, screenHeight / 8 - 10, 20, BLACK);
         }
-        ////////////////////////////////////////////////////////////////////// Dibujar grid///////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////// Dibujar grid ///////////////////////////////////////////////////////////////////////////////
         for (int i = 0; i < gridRows; i++)
         {
             for (int j = 0; j < gridCols; j++)
@@ -84,18 +90,28 @@ int main(void)
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
                 if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
-
                     if(modo==0){
                         cellstates[i][j] = 1;
                     }
                     if(modo==1){
-                        cellstates[i][j] = 2;
+                        if (origen[0]==-1 && origen[1]==-1)
+                        {
+                            cellstates[i][j] = 2;
+                            origen[0]={cell.x};
+                            origen[1]={cell.y};
+                        }else if (destino[0]==-1 && destino[1]==-1){
+                            cellstates[i][j] = 2;
+                            destino[0]={cell.x};
+                            destino[1]={cell.y};
+                        }
                     }
                 }
-                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) )
+                
+                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && modo==0 )
                 {
                     cellstates[i][j] = 0;
                 }
+                
             }
         }
     
@@ -114,28 +130,29 @@ int main(void)
             {
                 Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
-                if (cellstates[i][j] >= 1)
+                if (cellstates[i][j] != 0)
                 {
-                    if (modo==0 && cellstates[i][j] == 1)
+                    if (cellstates[i][j] == 1)
                     {   
-                        DrawRectangleRec(cell, RED);
-                    }else if(modo==1 && cellstates[i][j] == 2){
-                        if (origen==0)
+                        DrawRectangleRec(cell, (Color){ 255, 0, 0, 255 }); //Rojo
+                    }else if(cellstates[i][j] == 2){
+                        if (destino[0]!=-1 && destino[1]!=-1){
+                            if (origen[0]==cell.x){
+                                DrawRectangleRec(cell, (Color){ 4, 255, 0, 255 }); //verde
+                            }else{
+                                DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); //amarillo
+                            }
+                        }
+                        else if (origen[0]!=-1 && origen[1]!=-1)
                         {
                             DrawRectangleRec(cell, (Color){ 4, 255, 0, 255 }); //verde
-                            origen=+1;
-                        }else if (origen==1){
-                            DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); //amarillo
-                            origen=+1;
-                        }else{
-                            DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
                         }
                     }
                 }
                 else
                 {
                     // Inactive cell (blue or darker if hovered)
-                    DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
+                    DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 }); //Celeste
                 }
             }
         }
