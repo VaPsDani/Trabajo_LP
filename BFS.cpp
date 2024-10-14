@@ -2,43 +2,43 @@
 #include <iostream>
 #include <queue>
 #include "BFS.h"
+
 using namespace std;
-struct Nodo{
-        int x, y;
-        Nodo(int x, int y) : x(x), y(y) {}
-    }; 
-vector<vector<float>> BFS(int ix, int iy, int fx, int fy) /////////chekear tipo de retorno
-{   
-    bool visitado[6][12]={false};
-    float padre[6][12][2]={-1};
+
+struct Nodo {
+    int x, y;
+    Nodo(int x, int y) : x(x), y(y) {}
+};
+
+vector<vector<float>> BFS(int ix, int iy, int fx, int fy, float cellWidth, float cellHeight, int cellStates[6][12]) {
+    bool visitado[6][12] = {false};
+    float padre[6][12][2];
+    fill(&padre[0][0][0], &padre[0][0][0] + sizeof(padre) / sizeof(float), -1); // Inicializar a -1
+
     queue<Nodo> Cola;
     Cola.push(Nodo(ix, iy));
-    visitado[ix][iy]=true;
-    padre[ix][iy][0]=-1;
-    float ruta[36][2];
-    int contador=0;
+    visitado[ix][iy] = true;
 
-    int dx[4] = {-1, 0, 1, 0}; // Direcciones de movimiento: arriba, derecha, abajo, izquierda
+    int dx[4] = {-1, 0, 1, 0};
     int dy[4] = {0, 1, 0, -1};
 
-    while (!Cola.empty())
-    {
+    vector<vector<float>> ruta;
+
+    while (!Cola.empty()) {
         Nodo nodo = Cola.front();
         Cola.pop();
 
-        if ((nodo.x==fx) && (nodo.y=fy)){
+        if (nodo.x == fx && nodo.y == fy) {
+            cout << "Ruta encontrada" << endl;
             int x = fx, y = fy;
             while (padre[x][y][0] != -1) {
-                cout << "(" << x << ", " << y << ") <- ";
+                ruta.push_back({x * cellWidth, y * cellHeight});
                 int tempX = padre[x][y][0];
                 int tempY = padre[x][y][1];
                 x = tempX;
                 y = tempY;
-                ruta[contador][0]=x;
-                ruta[contador][1]=y;
-                contador+=1;
             }
-            ///cout << "(" << ix << ", " << iy << ")" << endl;
+            ruta.push_back({ix * cellWidth, iy * cellHeight});
             return ruta;
         }
 
@@ -46,7 +46,7 @@ vector<vector<float>> BFS(int ix, int iy, int fx, int fy) /////////chekear tipo 
             int newX = nodo.x + dx[i];
             int newY = nodo.y + dy[i];
 
-            if(newX >= 0 && newY >= 0 && newX < 6 && newY < 12){
+            if (newX >= 0 && newY >= 0 && newX < 6 && newY < 12 && !visitado[newX][newY] && cellStates[newX][newY] != 1) {
                 Cola.push(Nodo(newX, newY));
                 visitado[newX][newY] = true;
                 padre[newX][newY][0] = nodo.x;
@@ -54,5 +54,7 @@ vector<vector<float>> BFS(int ix, int iy, int fx, int fy) /////////chekear tipo 
             }
         }
     }
-    cout <<"No se encontro una ruta valida" <<endl; /////////Poner tilde p
-};
+
+    cout << "No se encontró una ruta válida" << endl;
+    return ruta;
+}
