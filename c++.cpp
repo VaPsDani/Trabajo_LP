@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "BFS.h"
+#include <iostream>
+using namespace std;
 
 int main(void) {
     const int screenWidth = 1600;
@@ -37,6 +39,10 @@ int main(void) {
             if (origen[0] != -1 && destino[0] != -1) {
                 vector<vector<float>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 // Procesar la ruta 
+                for (const auto& punto : ruta) {
+                cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
+                }
+                cout << endl;
             }
         }
         ////////////////////CAMBIAR MODO//////////////////////////
