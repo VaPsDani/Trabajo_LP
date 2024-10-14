@@ -116,6 +116,30 @@ int main(void) {
         for (int j = 0; j <= gridCols; j++) {
             DrawLine(j * cellWidth, gridStartY, j * cellWidth, screenHeight, BLACK);
         }
+        Rectangle buttonB = { screenWidth / 2 - 200, screenHeight / 8 - 20, 100, 40 };
+        bool buttonHoveredB = CheckCollisionPointRec(GetMousePosition(), buttonB);
+
+        if (buttonHoveredB && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            // Button action here
+            DrawText("Button Pressed!", screenWidth / 2 - 130, screenHeight / 8 + 30, 20, RED);
+        }
+        DrawRectangleRec(buttonB, buttonHoveredB ? DARKGRAY : GRAY);
+        DrawText("BFS", screenWidth / 2 - 170, screenHeight / 8 - 10, 20, WHITE);
+
+        // Draw
+        Rectangle buttonD = { screenWidth / 2 + 80, screenHeight / 8 - 20, 150, 40 };
+        bool buttonHoveredD = CheckCollisionPointRec(GetMousePosition(), buttonD);
+
+        if (buttonHoveredD && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+        {
+            // Button action here
+            DrawText("Button Pressed!", screenWidth / 2 + 110 , screenHeight / 8 + 30, 20, RED);
+        }
+        DrawRectangleRec(buttonD, buttonHoveredD ? DARKGRAY : GRAY);
+        DrawText("D* focussed", screenWidth / 2 + 92 , screenHeight / 8 - 10, 20, WHITE);
+
+        DrawRectangleLines(screenWidth / 2 + 550, screenHeight / 8 - 20, 200, 40, BLACK);
 
         EndDrawing();
     }
