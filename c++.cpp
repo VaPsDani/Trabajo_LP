@@ -6,10 +6,10 @@ using namespace std;
 int main(void) {
     const int screenWidth = 1600;
     const int screenHeight = 900;
-    const int gridRows = 15;
-    const int gridCols = 15;
-    const int cellWidth = (screenWidth / 12) + 1;
-    const int cellHeight = (screenHeight - (screenHeight / 4)) / 6;
+    const int gridRows = 6;
+    const int gridCols = 12;
+    const int cellWidth = (screenWidth / gridCols) + 1;
+    const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
     const int gridStartY = screenHeight / 4;
     static int cellStates[gridRows][gridCols] = {0};
     static float origen[2] = { -1, -1 }; // Coordenadas de origen
@@ -38,7 +38,7 @@ int main(void) {
 
         if (IsKeyPressed(KEY_ENTER)) {
             if (origen[0] != -1 && destino[0] != -1) {
-                vector<vector<float>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
+                vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 // Procesar la ruta 
                 for (const auto& punto : ruta) {
                 cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
