@@ -71,7 +71,7 @@ int main(void) {
                         if (origen[0] == -1 && origen[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
                             origen[0] = (int)cell.x;
-                            origen[1] = (int)cell.y;
+                            origen[1] = (int)cell.y ;
                         } else if (destino[0] == -1 && destino[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
                             destino[0] = (int)cell.x;

@@ -28,7 +28,10 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
         
         Nodo nodo = Cola.front();
         Cola.pop();
-
+        cout << nodo.x << endl;
+        cout << nodo.y << endl;
+        cout << fx << endl;
+        cout << fy << endl;
         if (nodo.x == fx && nodo.y == fy) {
             cout << "Ruta encontrada" << endl;
             int x = fx/cellWidth, y = fy/cellHeight;
