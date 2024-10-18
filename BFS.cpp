@@ -10,9 +10,9 @@ struct Nodo {
     Nodo(int x, int y) : x(x), y(y) {}
 };
 
-vector<vector<float>> BFS(int ix, int iy, int fx, int fy, float cellWidth, float cellHeight, int cellStates[6][12]) {
-    bool visitado[6][12] = {false};
-    float padre[6][12][2];
+vector<vector<float>> BFS(int ix, int iy, int fx, int fy, float cellWidth, float cellHeight, int cellStates[15][15]) {
+    bool visitado[15][15] = {false};
+    float padre[15][15][2];
     fill(&padre[0][0][0], &padre[0][0][0] + sizeof(padre) / sizeof(float), -1); // Inicializar a -1
 
     queue<Nodo> Cola;

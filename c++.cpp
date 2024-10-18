@@ -6,10 +6,10 @@ using namespace std;
 int main(void) {
     const int screenWidth = 1600;
     const int screenHeight = 900;
-    const int gridRows = 6;
-    const int gridCols = 12;
-    const int cellWidth = (screenWidth / gridCols) + 1;
-    const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
+    const int gridRows = 15;
+    const int gridCols = 15;
+    const int cellWidth = (screenWidth / 12) + 1;
+    const int cellHeight = (screenHeight - (screenHeight / 4)) / 6;
     const int gridStartY = screenHeight / 4;
     static int cellStates[gridRows][gridCols] = {0};
     static float origen[2] = { -1, -1 }; // Coordenadas de origen
@@ -21,9 +21,10 @@ int main(void) {
 
     while (!WindowShouldClose()) {
         // Update
-
+        
+        SetExitKey(KEY_Q);
         ////////////////////////REINICIAR/////////////////////////////
-        if (IsKeyPressed(KEY_Q)) {
+        if (IsKeyPressed(KEY_ESCAPE)) {
             origen[0] = -1;
             origen[1] = -1;
             destino[0] = -1;
@@ -63,29 +64,29 @@ int main(void) {
                 Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
                 if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    if (modo == 0) {
+                    if (modo == 0 && cellStates[i][j] != 2) {
                         cellStates[i][j] = 1;
                     }
                     if (modo == 1) {
-                        if (origen[0] == -1 && origen[1] == -1) {
+                        if (origen[0] == -1 && origen[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            origen[0] = i;
-                            origen[1] = j;
-                        } else if (destino[0] == -1 && destino[1] == -1) {
+                            origen[0] = (int)cell.x;
+                            origen[1] = (int)cell.y;
+                        } else if (destino[0] == -1 && destino[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            destino[0] = i;
-                            destino[1] = j;
+                            destino[0] = (int)cell.x;
+                            destino[1] = (int)cell.y;
                         }
                     }
                 }
 
                 if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
                     if (modo == 0) {
-                        if (i == origen[0] && j == origen[1]) {
+                        if ((int)cell.x == origen[0] && (int)cell.y == origen[1]) {
                             origen[0] = -1;
                             origen[1] = -1;
                         }
-                        if (i == destino[0] && j == destino[1]) {
+                        if ((int)cell.x == destino[0] && (int)cell.y == destino[1]) {
                             destino[0] = -1;
                             destino[1] = -1;
                         }
@@ -97,7 +98,7 @@ int main(void) {
                     if (cellStates[i][j] == 1) {
                         DrawRectangleRec(cell, (Color){ 255, 0, 0, 255 }); // Rojo
                     } else if (cellStates[i][j] == 2) {
-                        if (i == origen[0] && j == origen[1]) {
+                        if ((int)cell.x == origen[0] && (int)cell.y == origen[1]) {
                             DrawRectangleRec(cell, (Color){ 4, 255, 0, 255 }); // Verde
                         } else {
                             DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); // Amarillo
