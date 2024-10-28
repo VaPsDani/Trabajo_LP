@@ -24,7 +24,7 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
 
     queue<Nodo> Cola;
     Cola.push(Nodo(ix, iy));
-    visitado[ix/cellWidth][(iy-225)/cellHeight] = true;
+    visitado[(iy-225)/cellHeight][ix/cellWidth] = true;
 
     int dx[4] = {-cellWidth, 0, cellWidth, 0};
     int dy[4] = {0, cellHeight, 0, -cellHeight};
@@ -37,12 +37,12 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
         Cola.pop();
         if (nodo.x == fx && nodo.y == fy) {
             cout << "Ruta encontrada" << endl;
-            int a = fx/cellWidth, b = (fy-225)/cellHeight;
+            int a = (fy-225)/cellHeight, b = fx/cellWidth;
             while (padre[a][b].x != -1) {
                 ruta.push_back({a, b});
                 Nodo temp = padre[a][b];
-                a = temp.x/cellWidth;
-                b = (temp.y-225)/cellHeight;
+                a = (temp.y-225)/cellHeight;
+                b = temp.x/cellWidth;
             }
             ruta.push_back({a, b});
             return ruta;
@@ -53,13 +53,10 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
             int newY = nodo.y + dy[i];
             
 
-            if (newX >= 0 && newY >= 225 && newX < 1600  && newY < 897 && !visitado[newX/cellWidth][(newY-225)/cellHeight] && cellStates[newX/cellWidth][(newY-225)/cellHeight] != 1) {
+            if (newX >= 0 && newY >= 225 && newX < 1600  && newY < 897 && !visitado[(newY-225)/cellHeight][newX/cellWidth] && cellStates[(newY-225)/cellHeight][newX/cellWidth] != 1) {
                 Cola.push(Nodo(newX, newY));
-                cout << "Nodo: " << newX/cellWidth<< " " << (newY-225)/cellHeight << endl;
-                cout << nodo.x << " " << nodo.y << endl;
-                cout << "----------------" << endl;
-                visitado[newX/cellWidth][(newY-225)/cellHeight] = true;
-                padre[newX/cellWidth][(newY-225)/cellHeight] = nodo;
+                visitado[(newY-225)/cellHeight][newX/cellWidth] = true;
+                padre[(newY-225)/cellHeight][newX/cellWidth] = nodo;
 
             }
 
