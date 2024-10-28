@@ -40,7 +40,7 @@ int main(void) {
             if (origen[0] != -1 && destino[0] != -1) {
                 vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 // Procesar la ruta 
-                for (const auto& punto : ruta) {
+                for (auto& punto : ruta) {
                 cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
                 }
                 cout << endl;

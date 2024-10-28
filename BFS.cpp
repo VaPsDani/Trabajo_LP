@@ -14,11 +14,11 @@ struct Nodo {
 vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellHeight, int cellStates[6][12]) {
     bool visitado[6][12] = {false};
     Nodo padre[6][12];
-    queue<Nodo> orden ;
-    int z = 0;
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 12; ++j) {
             padre[i][j] = Nodo();
+            padre[i][j].x = -1;
+            padre[i][j].y = -1;
         }
     }// Inicializar a -1
 
@@ -35,19 +35,16 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
 
         Nodo nodo = Cola.front();
         Cola.pop();
-        cout << nodo.x << endl;
-        cout << nodo.y << endl;
-        cout << "----------------" << endl;
         if (nodo.x == fx && nodo.y == fy) {
             cout << "Ruta encontrada" << endl;
-            int x = fx/cellWidth, y = (fy-225)/cellHeight;
-            while (!padre[x][y].x == -1 && !padre[x][y].y == -1) {
-                ruta.push_back({x, y});
-                Nodo temp = padre[x][y];
-                x = temp.x;
-                y = temp.y;
+            int a = fx/cellWidth, b = (fy-225)/cellHeight;
+            while (!padre[a][b].x == -1 && !padre[a][b].y == -1) {
+                ruta.push_back({a, b});
+                Nodo temp = padre[a][b];
+                a = temp.x;
+                b = temp.y;
             }
-            ruta.push_back({ix, iy });
+            ruta.push_back({a, b});
             return ruta;
         }
 
@@ -56,9 +53,11 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
             int newY = nodo.y + dy[i];
             
 
-            if (newX >= 0 && newY >= 0 && newX < 675 && newY < 1600 && !visitado[newX/cellWidth][(newY-225)/cellHeight] && cellStates[newX/cellWidth][(newY-225)/cellHeight] != 1) {
+            if (newX >= 0 && newY >= 225 && newX < 1600  && newY < 897 && !visitado[newX/cellWidth][(newY-225)/cellHeight] && cellStates[newX/cellWidth][(newY-225)/cellHeight] != 1) {
                 Cola.push(Nodo(newX, newY));
-                orden.push(Nodo(newX, newY));
+                cout << "Nodo: " << newX/cellWidth<< " " << (newY-225)/cellHeight << endl;
+                cout << nodo.x << " " << nodo.y << endl;
+                cout << "----------------" << endl;
                 visitado[newX/cellWidth][(newY-225)/cellHeight] = true;
                 padre[newX/cellWidth][(newY-225)/cellHeight] = nodo;
 
@@ -67,15 +66,7 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
         }
     }
 
-    for (int i = 0; i < orden.size(); i++)
-    {
-        int a =  orden.front().x / cellWidth;
-        int b = (orden.front().y - 225) / cellHeight;
-        cout << a << b << endl;
-        orden.pop();
-    }
     
-
 
     cout << "No se encontró una ruta válida" << endl;
     return ruta;
