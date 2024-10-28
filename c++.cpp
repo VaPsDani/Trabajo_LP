@@ -41,9 +41,14 @@ int main(void) {
                 vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 // Procesar la ruta 
                 for (auto& punto : ruta) {
-                cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
-                }
+                    cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
+                    cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
+                    cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
+                    if ((punto[1] != origen[0]/cellWidth || punto[0] != (origen[1]-225)/cellHeight) && (punto[1] != destino[0]/cellWidth || punto[0] != (destino[1]-225)/cellHeight)) {
+                        cellStates[punto[0]][punto[1]] = 3;
+                    }
                 cout << endl;
+                }
             }
         }
         ////////////////////CAMBIAR MODO//////////////////////////
@@ -103,6 +108,10 @@ int main(void) {
                         } else {
                             DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); // Amarillo
                         }
+                    }else if (cellStates[i][j] == 3) {
+                        DrawRectangleRec(cell, (Color){ 0, 0, 255, 255 }); // Azul
+                        DrawLine(cell.x, cell.y, cell.x + cell.width, cell.y + cell.height, BLACK); // Línea diagonal de arriba izquierda a abajo derecha
+                        DrawLine(cell.x + cell.width, cell.y, cell.x, cell.y + cell.height, BLACK);
                     }
                 } else {
                     DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
