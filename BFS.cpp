@@ -38,11 +38,11 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
         if (nodo.x == fx && nodo.y == fy) {
             cout << "Ruta encontrada" << endl;
             int a = fx/cellWidth, b = (fy-225)/cellHeight;
-            while (!padre[a][b].x == -1 && !padre[a][b].y == -1) {
+            while (padre[a][b].x != -1) {
                 ruta.push_back({a, b});
                 Nodo temp = padre[a][b];
-                a = temp.x;
-                b = temp.y;
+                a = temp.x/cellWidth;
+                b = (temp.y-225)/cellHeight;
             }
             ruta.push_back({a, b});
             return ruta;
