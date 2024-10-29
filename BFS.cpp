@@ -2,6 +2,7 @@
 #include <iostream>
 #include <queue>
 #include "BFS.h"
+#include "raylib.h"
 
 using namespace std;
 
@@ -11,11 +12,11 @@ struct Nodo {
     Nodo(int x, int y) : x(x), y(y) {}
 };
 
-vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellHeight, int cellStates[6][12]) {
-    bool visitado[6][12] = {false};
-    Nodo padre[6][12];
-    for (int i = 0; i < 6; ++i) {
-        for (int j = 0; j < 12; ++j) {
+vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellHeight, int cellStates[20][20]) {
+    bool visitado[20][20] = {false};
+    Nodo padre[20][20];
+    for (int i = 0; i < 20; ++i) {
+        for (int j = 0; j < 20; ++j) {
             padre[i][j] = Nodo();
             padre[i][j].x = -1;
             padre[i][j].y = -1;
@@ -53,7 +54,7 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
             int newY = nodo.y + dy[i];
             
 
-            if (newX >= 0 && newY >= 225 && newX < 1600  && newY < 897 && !visitado[(newY-225)/cellHeight][newX/cellWidth] && cellStates[(newY-225)/cellHeight][newX/cellWidth] != 1) {
+            if (newX >= 100 && newY >= 225 && newX < GetScreenWidth() - 100  && newY < GetScreenHeight() - 100 && !visitado[(newY-225)/cellHeight][newX/cellWidth] && cellStates[(newY-225)/cellHeight][newX/cellWidth] != 1) {
                 Cola.push(Nodo(newX, newY));
                 visitado[(newY-225)/cellHeight][newX/cellWidth] = true;
                 padre[(newY-225)/cellHeight][newX/cellWidth] = nodo;

@@ -4,23 +4,27 @@
 using namespace std;
 
 int main(void) {
-    const int screenWidth = 1600;
-    const int screenHeight = 900;
-    const int gridRows = 6;
-    const int gridCols = 12;
-    const int cellWidth = (screenWidth / gridCols) + 1;
-    const int cellHeight = (screenHeight - (screenHeight / 4)) / gridRows;
-    const int gridStartY = screenHeight / 4;
-    static int cellStates[gridRows][gridCols] = {0};
+    int screenWidth = 1600;
+    int screenHeight = 900;
+    bool block = false;
+    const int cellWidth = 100;
+    const int cellHeight = 100;
+    const int gridStartY = 225;
+    int cellStates[20][20] = {0};
     static float origen[2] = { -1, -1 }; // Coordenadas de origen
     static float destino[2] = { -1, -1 }; // Coordenadas de destino
     static int modo=0;
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
     SetTargetFPS(144);
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     while (!WindowShouldClose()) {
         // Update
+        screenWidth = GetScreenWidth();
+        screenHeight = GetScreenHeight();
+        int gridRows = (screenHeight / cellHeight) - 1;
+        int gridCols = (screenWidth / cellWidth) - 2;
         
         SetExitKey(KEY_Q);
         ////////////////////////REINICIAR/////////////////////////////
@@ -34,7 +38,9 @@ int main(void) {
                     cellStates[i][j] = 0;
                 }
             }
+            block = false;
         }
+        
 
         if (IsKeyPressed(KEY_ENTER)) {
             if (origen[0] != -1 && destino[0] != -1) {
@@ -50,6 +56,7 @@ int main(void) {
                 cout << endl;
                 }
             }
+            block = true;
         }
         ////////////////////CAMBIAR MODO//////////////////////////
         if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
@@ -64,12 +71,12 @@ int main(void) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        for (int i = 0; i < gridRows; i++) {
+        for (int i = 0; i < gridRows - 2; i++) {
             for (int j = 0; j < gridCols; j++) {
-                Rectangle cell = { j * cellWidth, gridStartY + i * cellHeight, cellWidth, cellHeight };
+                Rectangle cell = { j * cellWidth + 100, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
-                if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    if (modo == 0 && cellStates[i][j] != 2) {
+                if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !block) {
+                    if (modo == 0 && cellStates[i][j] != 2 && !block) {
                         cellStates[i][j] = 1;
                     }
                     if (modo == 1) {
@@ -85,7 +92,7 @@ int main(void) {
                     }
                 }
 
-                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+                if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && !block) {
                     if (modo == 0) {
                         if ((int)cell.x == origen[0] && (int)cell.y == origen[1]) {
                             origen[0] = -1;
@@ -115,17 +122,14 @@ int main(void) {
                     }
                 } else {
                     DrawRectangleRec(cell, cellHovered ? (Color){ 92, 118, 127, 255 } : (Color){ 184, 237, 255, 255 });
+                    DrawRectangleLinesEx(cell, 1, BLACK); // Usar DrawRectangleLinesEx para especificar el grosor
+
                 }
             }
         }
 
         // Dibuja las líneas de la cuadrícula
-        for (int i = 0; i <= gridRows; i++) {
-            DrawLine(0, gridStartY + i * cellHeight, screenWidth, gridStartY + i * cellHeight, BLACK);
-        }
-        for (int j = 0; j <= gridCols; j++) {
-            DrawLine(j * cellWidth, gridStartY, j * cellWidth, screenHeight, BLACK);
-        }
+        
         Rectangle buttonB = { screenWidth / 2 - 200, screenHeight / 8 - 20, 100, 40 };
         bool buttonHoveredB = CheckCollisionPointRec(GetMousePosition(), buttonB);
 
