@@ -71,9 +71,9 @@ int main(void) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        for (int i = 0; i < gridRows - 2; i++) {
+        for (int i = 0; i < gridRows-2; i++) {
             for (int j = 0; j < gridCols; j++) {
-                Rectangle cell = { j * cellWidth + 100, gridStartY + i * cellHeight, cellWidth, cellHeight };
+                Rectangle cell = { j * cellWidth +100, gridStartY + i * cellHeight, cellWidth, cellHeight };
                 bool cellHovered = CheckCollisionPointRec(GetMousePosition(), cell);
                 if (cellHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !block) {
                     if (modo == 0 && cellStates[i][j] != 2 && !block) {
@@ -82,11 +82,11 @@ int main(void) {
                     if (modo == 1) {
                         if (origen[0] == -1 && origen[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            origen[0] = (int)cell.x;
+                            origen[0] = (int)cell.x - 100;
                             origen[1] = (int)cell.y ;
                         } else if (destino[0] == -1 && destino[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            destino[0] = (int)cell.x;
+                            destino[0] = (int)cell.x - 100;
                             destino[1] = (int)cell.y;
                         }
                     }
@@ -110,7 +110,7 @@ int main(void) {
                     if (cellStates[i][j] == 1) {
                         DrawRectangleRec(cell, (Color){ 255, 0, 0, 255 }); // Rojo
                     } else if (cellStates[i][j] == 2) {
-                        if ((int)cell.x == origen[0] && (int)cell.y == origen[1]) {
+                        if ((int)cell.x -100 == origen[0] && (int)cell.y == origen[1]) {
                             DrawRectangleRec(cell, (Color){ 4, 255, 0, 255 }); // Verde
                         } else {
                             DrawRectangleRec(cell, (Color){ 255, 234, 0, 255 }); // Amarillo
