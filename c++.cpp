@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "BFS.h"
+#include "D.h"
 #include <iostream>
 using namespace std;
 
@@ -21,6 +22,14 @@ int main(void) {
 
     while (!WindowShouldClose()) {
         // Update
+        
+        if (origen[0] != -1 && destino[0] != -1)
+        {
+            Vector2 pos=GetWindowPosition();
+            SetWindowSize(screenWidth, screenHeight);
+            SetWindowPosition(pos.x, pos.y);
+        }
+        
         screenWidth = GetScreenWidth();
         screenHeight = GetScreenHeight();
         int gridRows = (screenHeight / cellHeight) - 1;
@@ -38,6 +47,7 @@ int main(void) {
                     cellStates[i][j] = 0;
                 }
             }
+
             block = false;
         }
         
@@ -56,6 +66,7 @@ int main(void) {
                 cout << endl;
                 }
             }
+            SetWindowSize(screenWidth, screenHeight);
             block = true;
         }
         ////////////////////CAMBIAR MODO//////////////////////////
@@ -82,23 +93,23 @@ int main(void) {
                     if (modo == 1) {
                         if (origen[0] == -1 && origen[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            origen[0] = (int)cell.x - 100;
-                            origen[1] = (int)cell.y ;
+                            origen[0] = cell.x - 100;
+                            origen[1] = cell.y ;
                         } else if (destino[0] == -1 && destino[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            destino[0] = (int)cell.x - 100;
-                            destino[1] = (int)cell.y;
+                            destino[0] = cell.x - 100;
+                            destino[1] = cell.y;
                         }
                     }
                 }
 
                 if (cellHovered && IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && !block) {
                     if (modo == 0) {
-                        if ((int)cell.x == origen[0] && (int)cell.y == origen[1]) {
+                        if (cell.x == (origen[0]+ 100) && cell.y == origen[1]) {
                             origen[0] = -1;
                             origen[1] = -1;
                         }
-                        if ((int)cell.x == destino[0] && (int)cell.y == destino[1]) {
+                        if (cell.x == (destino[0]+ 100) && cell.y == destino[1]) {
                             destino[0] = -1;
                             destino[1] = -1;
                         }
