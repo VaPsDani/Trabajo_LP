@@ -69,6 +69,23 @@ int main(void) {
             SetWindowSize(screenWidth, screenHeight);
             block = true;
         }
+        if (IsKeyPressed(KEY_SPACE)) {
+            if (origen[0] != -1 && destino[0] != -1) {
+                vector<pair<int,int>> ruta = FDS(origen[0], origen[1], destino[0], destino[1], gridRows, gridCols, cellStates);
+                // Procesar la ruta 
+                for (auto& punto : ruta) {
+                    cout << "(" << [0] << ", " << punto[1] << ") <- ";
+                    cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
+                    cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
+                    if ((punto[1] != origen[0]/cellWidth || punto[0] != (origen[1]-225)/cellHeight) && (punto[1] != destino[0]/cellWidth || punto[0] != (destino[1]-225)/cellHeight)) {
+                        cellStates[punto[0]][punto[1]] = 3;
+                    }
+                cout << endl;
+                }
+            }
+            SetWindowSize(screenWidth, screenHeight);
+            block = true;
+        }
         ////////////////////CAMBIAR MODO//////////////////////////
         if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
             modo = !modo;
