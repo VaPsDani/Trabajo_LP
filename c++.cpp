@@ -69,6 +69,7 @@ int main(void) {
             SetWindowSize(screenWidth, screenHeight);
             block = true;
         }
+        /*
         if (IsKeyPressed(KEY_SPACE)) {
             if (origen[0] != -1 && destino[0] != -1) {
                 vector<pair<int,int>> ruta = FDS(origen[0], origen[1], destino[0], destino[1], gridRows, gridCols, cellStates);
@@ -86,6 +87,12 @@ int main(void) {
             SetWindowSize(screenWidth, screenHeight);
             block = true;
         }
+        
+        
+        
+        
+        */
+        
         ////////////////////CAMBIAR MODO//////////////////////////
         if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
             modo = !modo;
