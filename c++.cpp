@@ -72,14 +72,20 @@ int main(void) {
         
         if (IsKeyPressed(KEY_SPACE)) {
             if (origen[0] != -1 && destino[0] != -1) {
-                vector<pair<int,int>> ruta = FDS(origen[0]/cellWidth, (origen[1]-225)/cellHeight, destino[0]/cellWidth, (destino[1]-255)/cellHeight, gridRows, gridCols, cellStates);
+                cout <<origen[0]/cellWidth<< endl;
+                cout <<(origen[1]-225)/cellHeight<< endl;
+                cout << destino[0]/cellWidth<< endl;
+                cout <<(destino[1]-225)/cellHeight<< endl;
+                cout << gridRows<< endl;
+                cout << gridCols<< endl;
+                vector<pair<int,int>> rut = FDS(origen[0]/cellWidth, (origen[1]-225)/cellHeight, destino[0]/cellWidth, (destino[1]-225)/cellHeight, gridCols, gridRows, cellStates);
                 // Procesar la ruta 
-                for (auto& punto : ruta) {
-                    cout << "(" << punto.first << ", " << punto.second << ") <- ";
+                for (auto& punt : rut) {
+                    cout << "(" << punt.first << ", " << punt.second << ") <- ";
                     cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
-                    if ((punto.first != origen[0]/cellWidth || punto.first != (origen[1]-225)/cellHeight) && (punto.second != destino[0]/cellWidth || punto.first != (destino[1]-225)/cellHeight)) {
-                        cellStates[punto.first][punto.second] = 3;
+                    if ((punt.first != origen[0]/cellWidth || punt.first != (origen[1]-225)/cellHeight) && (punt.second != destino[0]/cellWidth || punt.first != (destino[1]-225)/cellHeight)) {
+                        cellStates[punt.first][punt.second] = 3;
                     }
                 cout << endl;
                 }
