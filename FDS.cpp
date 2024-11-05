@@ -1,6 +1,5 @@
 #include "FDS.h"
 #include "raylib.h"
-
 #include <vector>
 #include <queue>
 #include <cmath>
@@ -14,7 +13,7 @@ struct Node {
     std::string status;
 
     Node(int x, int y) : x(x), y(y), totalCost(INT_MAX), heuristic(INT_MAX), backPointer(nullptr), status("NEW") {}
-
+    
     bool operator>(const Node& other) const {
         return heuristic > other.heuristic;
     }
@@ -60,11 +59,17 @@ std::vector<std::pair<int, int>> constructPath(Node* goal) {
 }
 
 std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int C, int cellStates[20][20]) {
+    // Check starting and goal positions
+    if (ix < 0 || ix >= R || iy < 0 || iy >= C || fx < 0 || fx >= R || fy < 0 || fy >= C) {
+        std::cerr << "Start or goal position out of bounds." << std::endl;
+        return {};
+    }
+
     // Create grid of nodes, avoiding obstacles
     std::vector<std::vector<Node*>> grid(R, std::vector<Node*>(C, nullptr));
     for (int x = 0; x < R; ++x) {
         for (int y = 0; y < C; ++y) {
-            if (!cellStates[x][y]) {
+            if (!cellStates[x][y]) { // Assuming 0 means walkable
                 grid[x][y] = new Node(x, y);
             }
         }
@@ -72,9 +77,18 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
 
     Node* start = grid[ix][iy];
     Node* goal = grid[fx][fy];
-    
+
     // Ensure start and goal nodes are not obstacles
-    if (!start || !goal) return {};
+    if (!start || !goal) {
+        std::cerr << "Start or goal node is an obstacle." << std::endl;
+        // Cleanup allocated nodes before returning
+        for (auto& row : grid) {
+            for (auto& node : row) {
+                delete node; // Freeing allocated memory
+            }
+        }
+        return {};
+    }
 
     start->totalCost = 0;
     start->heuristic = heuristic(start, goal);
@@ -86,7 +100,14 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
         openList.pop();
         
         if (current == goal) {
-            return constructPath(goal);
+            auto path = constructPath(goal);
+            // Cleanup allocated nodes
+            for (auto& row : grid) {
+                for (auto& node : row) {
+                    delete node; // Freeing allocated memory
+                }
+            }
+            return path;
         }
 
         current->status = "CLOSED";
@@ -103,11 +124,20 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
                     neighbor->status = "OPEN";
                     openList.push(neighbor);
                 } else {
+                    // Re-insert the neighbor to update its priority
                     openList.push(neighbor);
                 }
             }
         }
     }
-    
-    return {}; 
+
+    // Cleanup allocated nodes before returning
+    for (auto& row : grid) {
+        for (auto& node : row) {
+            delete node; // Freeing allocated memory
+        }
+    }
+
+    std::cerr << "No path found." << std::endl;
+    return {};
 }
