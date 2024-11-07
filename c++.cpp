@@ -123,11 +123,11 @@ int main(void) {
                     if (modo == 1) {
                         if (origen[0] == -1 && origen[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            origen[0] = cell.x - 100;
+                            origen[0] = cell.x-100;
                             origen[1] = cell.y ;
                         } else if (destino[0] == -1 && destino[1] == -1 && cellStates[i][j] != 1) {
                             cellStates[i][j] = 2;
-                            destino[0] = cell.x - 100;
+                            destino[0] = cell.x-100;
                             destino[1] = cell.y;
                         }
                     }

@@ -48,16 +48,20 @@ vector<vector<int>> BFS(int ix, int iy, int fx, int fy, int cellWidth, int cellH
             ruta.push_back({a, b});
             return ruta;
         }
-
+        cout << "Nodo actual: " << nodo.x<< ", " << nodo.y << endl;
+        cout << "origen: " << ix << ", " << iy << endl;
+        cout << "destino: " << fx << ", " << fy << endl;
         for (int i = 0; i < 4; i++) {
+            
             int newX = nodo.x + dx[i];
             int newY = nodo.y + dy[i];
-            
+            cout << "Nodo hijo: " << newX << ", " << newY << endl;
 
-            if (newX >= 100 && newY >= 225 && newX < GetScreenWidth() - 100  && newY < GetScreenHeight() - 100 && !visitado[(newY-225)/cellHeight][newX/cellWidth] && cellStates[(newY-225)/cellHeight][newX/cellWidth] != 1) {
+            if (newX >= 0 && newY >= 225 && newX < GetScreenWidth() - 100  && newY < GetScreenHeight() - 100 && !visitado[(newY-225)/cellHeight][newX/cellWidth] && cellStates[(newY-225)/cellHeight][newX/cellWidth] != 1) {
                 Cola.push(Nodo(newX, newY));
                 visitado[(newY-225)/cellHeight][newX/cellWidth] = true;
                 padre[(newY-225)/cellHeight][newX/cellWidth] = nodo;
+                cout << "Nodo hijo IF: " << newX << ", " << newY << endl;
 
             }
 
