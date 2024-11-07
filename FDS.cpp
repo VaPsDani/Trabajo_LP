@@ -69,7 +69,7 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
     std::vector<std::vector<Node*>> grid(R, std::vector<Node*>(C, nullptr));
     for (int x = 0; x < R; ++x) {
         for (int y = 0; y < C; ++y) {
-            if (!cellStates[x][y]) { // Assuming 0 means walkable
+            if (cellStates[x][y]!=1) { // Assuming 0 means walkable
                 grid[x][y] = new Node(x, y);
             }
         }
