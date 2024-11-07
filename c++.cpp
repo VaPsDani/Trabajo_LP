@@ -80,7 +80,7 @@ int main(void) {
                 cout <<(destino[1]-225)/cellHeight<< endl;
                 cout << gridRows<< endl;
                 cout << gridCols<< endl;
-                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-1, gridCols+1, cellStates);
+                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-2, gridCols+1, cellStates);
                 // Procesar la ruta 
                 for (auto& punt : rut) {
                     cout << "(" << punt.first << ", " << punt.second << ") <- ";
