@@ -55,12 +55,14 @@ int main(void) {
         if (IsKeyPressed(KEY_ENTER)) {
             if (origen[0] != -1 && destino[0] != -1) {
                 vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
-                // Procesar la ruta 
+                
                 for (auto& punto : ruta) {
                     cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
                     cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
                     if ((punto[1] != origen[0]/cellWidth || punto[0] != (origen[1]-225)/cellHeight) && (punto[1] != destino[0]/cellWidth || punto[0] != (destino[1]-225)/cellHeight)) {
+                        cout<<punto[1]<<" ";//x
+                        cout<<punto[0]<<" ";//y
                         cellStates[punto[0]][punto[1]] = 3;
                     }
                 cout << endl;
@@ -78,14 +80,16 @@ int main(void) {
                 cout <<(destino[1]-225)/cellHeight<< endl;
                 cout << gridRows<< endl;
                 cout << gridCols<< endl;
-                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows+1, gridCols+1, cellStates);
+                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-1, gridCols+1, cellStates);
                 // Procesar la ruta 
                 for (auto& punt : rut) {
                     cout << "(" << punt.first << ", " << punt.second << ") <- ";
                     cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
-                    cellStates[punt.first][punt.second] = 3;
-                    if ((punt.first != origen[0]/cellWidth || punt.second != (origen[1]-225)/cellHeight) && (punt.first != destino[0]/cellWidth || punt.second != (destino[1]-225)/cellHeight)) {
+                    
+                    if ((punt.second != origen[0]/cellWidth || punt.first != (origen[1]-225)/cellHeight) && (punt.second != destino[0]/cellWidth || punt.first != (destino[1]-225)/cellHeight)) {
+                        cout<<punt.first<<" ";//y
+                        cout<<punt.second<<" ";//x
                         cellStates[punt.first][punt.second] = 3;
                     }
                 cout << endl;
@@ -94,11 +98,6 @@ int main(void) {
             SetWindowSize(screenWidth, screenHeight);
             block = true;
         }
-        
-        
-        
-        
-        
         
         ////////////////////CAMBIAR MODO//////////////////////////
         if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
