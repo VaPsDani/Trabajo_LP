@@ -84,7 +84,8 @@ int main(void) {
                     cout << "(" << punt.first << ", " << punt.second << ") <- ";
                     cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
-                    if ((punt.second != origen[0]/cellWidth && punt.first != (origen[1]-225)/cellHeight) || (punt.second != destino[0]/cellWidth && punt.first != (destino[1]-225)/cellHeight)) {
+                    cellStates[punt.first][punt.second] = 3;
+                    if ((punt.first != origen[0]/cellWidth || punt.second != (origen[1]-225)/cellHeight) && (punt.first != destino[0]/cellWidth || punt.second != (destino[1]-225)/cellHeight)) {
                         cellStates[punt.first][punt.second] = 3;
                     }
                 cout << endl;
