@@ -78,13 +78,13 @@ int main(void) {
                 cout <<(destino[1]-225)/cellHeight<< endl;
                 cout << gridRows<< endl;
                 cout << gridCols<< endl;
-                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , 20, 20, cellStates);
+                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows+1, gridCols+1, cellStates);
                 // Procesar la ruta 
                 for (auto& punt : rut) {
                     cout << "(" << punt.first << ", " << punt.second << ") <- ";
                     cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
-                    if ((punt.first != origen[0]/cellWidth || punt.first != (origen[1]-225)/cellHeight) && (punt.second != destino[0]/cellWidth || punt.first != (destino[1]-225)/cellHeight)) {
+                    if ((punt.second != origen[0]/cellWidth && punt.first != (origen[1]-225)/cellHeight) || (punt.second != destino[0]/cellWidth && punt.first != (destino[1]-225)/cellHeight)) {
                         cellStates[punt.first][punt.second] = 3;
                     }
                 cout << endl;
