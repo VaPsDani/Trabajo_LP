@@ -44,7 +44,9 @@ int main(void) {
             destino[1] = -1;
             for (int i = 0; i < gridRows; i++) {
                 for (int j = 0; j < gridCols; j++) {
-                    cellStates[i][j] = 0;
+                    if(cellStates[i][j] != 1){
+                        cellStates[i][j] = 0;
+                    }
                 }
             }
 
