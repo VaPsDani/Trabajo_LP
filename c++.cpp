@@ -4,6 +4,7 @@
 #include <iostream>
 using namespace std;
 
+
 int main(void) {
     int screenWidth = 1600;
     int screenHeight = 900;
@@ -56,6 +57,13 @@ int main(void) {
 
         if (IsKeyPressed(KEY_ENTER)) {
             if (origen[0] != -1 && destino[0] != -1) {
+                for (int i = 0; i < gridRows; i++) {
+                    for (int j = 0; j < gridCols; j++) {
+                        if(cellStates[i][j] == 3){
+                            cellStates[i][j] = 0;
+                        }
+                    }
+                }
                 vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 
                 for (auto& punto : ruta) {
@@ -76,6 +84,13 @@ int main(void) {
         
         if (IsKeyPressed(KEY_SPACE)) {
             if (origen[0] != -1 && destino[0] != -1) {
+                for (int i = 0; i < gridRows; i++) {
+                    for (int j = 0; j < gridCols; j++) {
+                        if(cellStates[i][j] == 3){
+                            cellStates[i][j] = 0;
+                        }
+                    }
+                }
                 cout <<origen[0]/cellWidth<< endl;
                 cout <<(origen[1]-225)/cellHeight<< endl;
                 cout << destino[0]/cellWidth<< endl;
@@ -90,8 +105,6 @@ int main(void) {
                     cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
                     
                     if ((punt.second != origen[0]/cellWidth || punt.first != (origen[1]-225)/cellHeight) && (punt.second != destino[0]/cellWidth || punt.first != (destino[1]-225)/cellHeight)) {
-                        cout<<punt.first<<" ";//y
-                        cout<<punt.second<<" ";//x
                         cellStates[punt.first][punt.second] = 3;
                     }
                 cout << endl;
@@ -202,5 +215,6 @@ int main(void) {
     }
 
     CloseWindow();
+    
     return 0;
 }
