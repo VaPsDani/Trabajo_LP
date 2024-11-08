@@ -2,6 +2,7 @@
 #include "BFS.h"
 #include "FDS.h"
 #include <iostream>
+#include <chrono>
 using namespace std;
 
 
@@ -64,6 +65,7 @@ int main(void) {
                         }
                     }
                 }
+                auto start = std::chrono::high_resolution_clock::now();
                 vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 
                 for (auto& punto : ruta) {
@@ -77,6 +79,9 @@ int main(void) {
                     }
                 cout << endl;
                 }
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = end - start;
+                std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
             }
             SetWindowSize(screenWidth, screenHeight);
             block = true;
@@ -91,12 +96,8 @@ int main(void) {
                         }
                     }
                 }
-                cout <<origen[0]/cellWidth<< endl;
-                cout <<(origen[1]-225)/cellHeight<< endl;
-                cout << destino[0]/cellWidth<< endl;
-                cout <<(destino[1]-225)/cellHeight<< endl;
-                cout << gridRows<< endl;
-                cout << gridCols<< endl;
+                auto start = std::chrono::high_resolution_clock::now();
+
                 vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-2, gridCols+1, cellStates);
                 // Procesar la ruta 
                 for (auto& punt : rut) {
@@ -109,6 +110,9 @@ int main(void) {
                     }
                 cout << endl;
                 }
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = end - start;
+                std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
             }
             SetWindowSize(screenWidth, screenHeight);
             block = true;
