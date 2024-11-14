@@ -24,7 +24,7 @@ int main(void) {
     static int modo=0;
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
-    SetTargetFPS(144);
+    SetTargetFPS(60);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     while (!WindowShouldClose()) {
