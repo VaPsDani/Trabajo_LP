@@ -74,7 +74,7 @@ int main(void) {
                 auto start = std::chrono::high_resolution_clock::now();
                 std::vector<std::vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 
-                for (auto& punto : ruta) {
+                for (auto punto : ruta) {
                     std::cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
                     std::cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     std::cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << std::endl;
@@ -86,7 +86,7 @@ int main(void) {
                 std::cout << std::endl;
                 }
                 size_t memoriaDespues =  medirUsoDeMemoria(ram);
-                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes) / 1024 << " KB" << std::endl;
+                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes)  << "Bytes" << std::endl;
                 auto end = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<double> elapsed = end - start;
                 std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
@@ -109,7 +109,7 @@ int main(void) {
 
                 std::vector<std::pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-2, gridCols+1, cellStates);
                 // Procesar la ruta 
-                for (auto& punt : rut) {
+                for (auto punt : rut) {
                     std::cout << "(" << punt.first << ", " << punt.second << ") <- ";
                     std::cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
                     std::cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << std::endl;
@@ -120,7 +120,7 @@ int main(void) {
                 std::cout << std::endl;
                 }
                 size_t memoriaDespues =  medirUsoDeMemoria(ram);
-                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes) / 1024 << " KB" << std::endl;
+                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes)  << "Bytes" << std::endl;
                 auto end = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<double> elapsed = end - start;
                 std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
