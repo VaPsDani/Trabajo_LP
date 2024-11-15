@@ -1,10 +1,17 @@
 #include "raylib.h"
+#include "RAM.h"
+
 #include "BFS.h"
 #include "FDS.h"
 #include <iostream>
-using namespace std;
+#include <chrono>
+
+size_t medirUsoDeMemoria(RAM& ram) {
+    return ram.obtenerUsoDeMemoria();
+}
 
 int main(void) {
+    RAM ram;
     int screenWidth = 1600;
     int screenHeight = 900;
     bool block = false;
@@ -17,7 +24,7 @@ int main(void) {
     static int modo=0;
 
     InitWindow(screenWidth, screenHeight, "Grupo 5 - Pathfinding");
-    SetTargetFPS(144);
+    SetTargetFPS(60);
     SetWindowState(FLAG_WINDOW_RESIZABLE);
 
     while (!WindowShouldClose()) {
@@ -44,7 +51,9 @@ int main(void) {
             destino[1] = -1;
             for (int i = 0; i < gridRows; i++) {
                 for (int j = 0; j < gridCols; j++) {
-                    cellStates[i][j] = 0;
+                    if(cellStates[i][j] != 1){
+                        cellStates[i][j] = 0;
+                    }
                 }
             }
 
@@ -54,19 +63,33 @@ int main(void) {
 
         if (IsKeyPressed(KEY_ENTER)) {
             if (origen[0] != -1 && destino[0] != -1) {
-                vector<vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
+                for (int i = 0; i < gridRows; i++) {
+                    for (int j = 0; j < gridCols; j++) {
+                        if(cellStates[i][j] == 3){
+                            cellStates[i][j] = 0;
+                        }
+                    }
+                }
+                size_t memoriaAntes = medirUsoDeMemoria(ram);
+                auto start = std::chrono::high_resolution_clock::now();
+                std::vector<std::vector<int>> ruta = BFS(origen[0], origen[1], destino[0], destino[1], cellWidth, cellHeight, cellStates);
                 
-                for (auto& punto : ruta) {
-                    cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
-                    cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
-                    cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
+                for (auto punto : ruta) {
+                    std::cout << "(" << punto[0] << ", " << punto[1] << ") <- ";
+                    std::cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
+                    std::cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << std::endl;
                     if ((punto[1] != origen[0]/cellWidth || punto[0] != (origen[1]-225)/cellHeight) && (punto[1] != destino[0]/cellWidth || punto[0] != (destino[1]-225)/cellHeight)) {
-                        cout<<punto[1]<<" ";//x
-                        cout<<punto[0]<<" ";//y
+                        std::cout<<punto[1]<<" ";//x
+                        std::cout<<punto[0]<<" ";//y
                         cellStates[punto[0]][punto[1]] = 3;
                     }
-                cout << endl;
+                std::cout << std::endl;
                 }
+                size_t memoriaDespues =  medirUsoDeMemoria(ram);
+                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes)  << "Bytes" << std::endl;
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = end - start;
+                std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
             }
             SetWindowSize(screenWidth, screenHeight);
             block = true;
@@ -74,26 +97,33 @@ int main(void) {
         
         if (IsKeyPressed(KEY_SPACE)) {
             if (origen[0] != -1 && destino[0] != -1) {
-                cout <<origen[0]/cellWidth<< endl;
-                cout <<(origen[1]-225)/cellHeight<< endl;
-                cout << destino[0]/cellWidth<< endl;
-                cout <<(destino[1]-225)/cellHeight<< endl;
-                cout << gridRows<< endl;
-                cout << gridCols<< endl;
-                vector<pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-2, gridCols+1, cellStates);
+                for (int i = 0; i < gridRows; i++) {
+                    for (int j = 0; j < gridCols; j++) {
+                        if(cellStates[i][j] == 3){
+                            cellStates[i][j] = 0;
+                        }
+                    }
+                }
+                size_t memoriaAntes =  medirUsoDeMemoria(ram);
+                auto start = std::chrono::high_resolution_clock::now();
+
+                std::vector<std::pair<int,int>> rut = FDS((origen[1]-225)/cellHeight , origen[0]/cellWidth, (destino[1]-225)/cellHeight , destino[0]/cellWidth , gridRows-2, gridCols+1, cellStates);
                 // Procesar la ruta 
-                for (auto& punt : rut) {
-                    cout << "(" << punt.first << ", " << punt.second << ") <- ";
-                    cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
-                    cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << endl;
+                for (auto punt : rut) {
+                    std::cout << "(" << punt.first << ", " << punt.second << ") <- ";
+                    std::cout << origen[0]/cellWidth << ", " << (origen[1]-225)/cellHeight << " <- ";
+                    std::cout << destino[0]/cellWidth << ", " << (destino[1]-225)/cellHeight << std::endl;
                     
                     if ((punt.second != origen[0]/cellWidth || punt.first != (origen[1]-225)/cellHeight) && (punt.second != destino[0]/cellWidth || punt.first != (destino[1]-225)/cellHeight)) {
-                        cout<<punt.first<<" ";//y
-                        cout<<punt.second<<" ";//x
                         cellStates[punt.first][punt.second] = 3;
                     }
-                cout << endl;
+                std::cout << std::endl;
                 }
+                size_t memoriaDespues =  medirUsoDeMemoria(ram);
+                std::cout << "Memoria utilizada por Algoritmo 1: " << (memoriaDespues - memoriaAntes)  << "Bytes" << std::endl;
+                auto end = std::chrono::high_resolution_clock::now();
+                std::chrono::duration<double> elapsed = end - start;
+                std::cout << "Tiempo de ejecución: " << elapsed.count() << " segundos" << std::endl;
             }
             SetWindowSize(screenWidth, screenHeight);
             block = true;
@@ -169,7 +199,7 @@ int main(void) {
             }
         }
 
-        // Dibuja las líneas de la cuadrícula
+        // Dibuja las líneas de la cuadrícula;
         
         Rectangle buttonB = { screenWidth / 2 - 200, screenHeight / 8 - 20, 100, 40 };
         bool buttonHoveredB = CheckCollisionPointRec(GetMousePosition(), buttonB);
@@ -200,5 +230,6 @@ int main(void) {
     }
 
     CloseWindow();
+    
     return 0;
 }
