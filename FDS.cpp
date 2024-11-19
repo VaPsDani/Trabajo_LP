@@ -65,11 +65,11 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
         return {};
     }
 
-    // Create grid of nodes, avoiding obstacles
+    // crea una grilla evitando los rojos
     std::vector<std::vector<Node*>> grid(R, std::vector<Node*>(C, nullptr));
     for (int x = 0; x < R; ++x) {
         for (int y = 0; y < C; ++y) {
-            if (cellStates[x][y]!=1) { // Assuming 0 means walkable
+            if (cellStates[x][y]!=1) { 
                 grid[x][y] = new Node(x, y);
             }
         }
@@ -131,13 +131,13 @@ std::vector<std::pair<int, int>> FDS(int ix, int iy, int fx, int fy, int R, int 
         }
     }
 
-    // Cleanup allocated nodes before returning
+    //limpiar los nodos
     for (auto& row : grid) {
         for (auto& node : row) {
-            delete node; // Freeing allocated memory
+            delete node; // Liberar memoria
         }
     }
 
-    std::cerr << "No path found." << std::endl;
+    std::cerr << "No se encontro ningun camino" << std::endl;
     return {};
 }
